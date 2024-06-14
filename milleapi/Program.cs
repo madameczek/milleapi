@@ -30,8 +30,9 @@ app.MapControllers();
 
 // Recreate and migrate DB on each run
 // TODO remove on production
-using (var scope = app.Services.GetService<IServiceScopeFactory>()!.CreateScope())
+if (app.Environment.IsDevelopment())
 {
+    using var scope = app.Services.GetService<IServiceScopeFactory>()!.CreateScope();
     var context = scope.ServiceProvider.GetRequiredService<CustomerDbContext>();
     context.Database.EnsureDeleted();
     context.Database.Migrate();
