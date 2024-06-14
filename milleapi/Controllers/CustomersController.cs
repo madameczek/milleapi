@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using milleapi.App.Interfaces;
 using milleapi.Models;
+using milleapi.Shared.Mappers;
 
 namespace milleapi.Controllers;
 
@@ -19,14 +20,14 @@ public class CustomersController : Controller
     }
 
     [HttpPost]
-    public async Task<IActionResult> Create(CustomerDto customerResource, CancellationToken ct = default)
+    public async Task<IActionResult> Create(CreateCustomerDto createCustomerResource, CancellationToken ct = default)
     {
         try
         {
-            var id = await _customerService.Create(customerResource, ct);
+            var customer = await _customerService.Create(createCustomerResource.ToCustomer(), ct);
             _logger.LogInformation(
-                "{EndpointName} endpoint invoked. Customer: {Id} has been created", nameof(Create), id);
-            return Created($"/customers/{id}", null);
+                "{EndpointName} endpoint invoked. Customer: {Id} has been created", nameof(Create), customer.Id);
+            return Created($"/customers/{customer.Id}", customer);
         }
         catch (ArgumentException e)
         {
@@ -62,11 +63,11 @@ public class CustomersController : Controller
     }
     
      [HttpPut("{id:int}")]
-    public async Task<IActionResult> Update(int id, CustomerDto customerResource, CancellationToken ct = default)
+    public async Task<IActionResult> Update(int id, UpdateCustomerDto dto, CancellationToken ct = default)
     {
         try
         {
-            await _customerService.Update(id, customerResource, ct);
+            await _customerService.Update(id, dto.ToCustomer(), ct);
             _logger.LogInformation(
                 "{EndpointName} endpoint invoked. Customer: {Id} has been updated", nameof(Update), id);
             return NoContent();

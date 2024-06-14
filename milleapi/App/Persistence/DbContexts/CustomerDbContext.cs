@@ -13,9 +13,9 @@ public class CustomerDbContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         _ = modelBuilder.Entity<Customer>().HasData(
-            new Customer(1, "Kowalski") { FirstName = "Jan", CreatedOn = DateTime.UtcNow },
-            new Customer(2, "Adamski") { FirstName = "Adam", CreatedOn = DateTime.UtcNow },
-            new Customer(3, "Nowak") { FirstName = "Marcin", CreatedOn = DateTime.UtcNow  }
+            new Customer { Id = 1, FirstName = "Jan", LastName = "Kowalski", CreatedOn = DateTime.UtcNow },
+            new Customer { Id = 2, FirstName = "Adam", LastName = "Adamski", CreatedOn = DateTime.UtcNow },
+            new Customer { Id = 3, FirstName = "Marcin", LastName = "Nowak", CreatedOn = DateTime.UtcNow  }
         );
 
         base.OnModelCreating(modelBuilder);

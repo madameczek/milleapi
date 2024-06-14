@@ -14,9 +14,11 @@ public class CustomerRepository : ICustomerRepository
         _dbContext = dbContext;
     }
     
-    public Task Add(Customer customer, CancellationToken ct)
+    public async Task<Customer> Add(Customer customer, CancellationToken ct)
     {
-        throw new NotImplementedException();
+        var entry = _dbContext.Customers.Add(customer);
+        await _dbContext.SaveChangesAsync(ct);
+        return entry.Entity;
     }
 
     public Task<Customer> Get(int id)

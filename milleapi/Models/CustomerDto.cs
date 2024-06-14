@@ -1,16 +1,19 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace milleapi.Models;
+﻿namespace milleapi.Models;
 
 public class CustomerDto
 {
-    [MinLength(2)]
-    [StringLength(200)] 
-    public string FirstName { get; set; } = null!;
-    
-    [MinLength(2)]
-    [StringLength(200)]
-    public string LastName { get; set; } = null!;
-    
-    public bool IsDeleted { get; set; }
+    public int Id { get; init; }
+    public string? FirstName { get; init; }
+    public string LastName { get; init; }
+    public bool IsDeleted { get; init; }
+    public DateTime CreatedOn { get; init; }
+
+    public CustomerDto(int id, string? firstName, string lastName, bool isDeleted, DateTime createdOn)
+    {
+        Id = id;
+        FirstName = firstName;
+        LastName = lastName;
+        IsDeleted = isDeleted;
+        CreatedOn = createdOn;
+    }
 }
