@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using milleapi;
+using Microsoft.OpenApi.Models;
 using milleapi.App.Interfaces;
 using milleapi.App.Persistence;
 using milleapi.App.Persistence.DbContexts;
@@ -12,7 +12,10 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "MVC WebAPI", Version = "v1" });
+});
 
 builder.Services.AddDbContext<CustomerDbContext>(o => o.UseSqlite(
     builder.Configuration["ConnectionStrings:DishesDBConnectionString"]));

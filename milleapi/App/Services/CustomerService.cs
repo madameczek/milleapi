@@ -1,5 +1,4 @@
-﻿using System.Data;
-using milleapi.App.Interfaces;
+﻿using milleapi.App.Interfaces;
 using milleapi.Entities;
 
 namespace milleapi.App.Services;
