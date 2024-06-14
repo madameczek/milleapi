@@ -19,12 +19,12 @@ public class CustomerService : ICustomerService
         throw new RowNotInTableException();
     }
 
-    public Task Update(string id, CustomerDto dto, CancellationToken cancellationToken)
+    public Task Update(int id, CustomerDto dto, CancellationToken cancellationToken)
     {
         throw new RowNotInTableException();
     }
 
-    public Task Remove(string id, CancellationToken cancellationToken)
+    public Task Remove(int id, CancellationToken cancellationToken)
     {
         throw new NotImplementedException();
     }

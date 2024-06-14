@@ -62,7 +62,7 @@ public class CustomersController : Controller
     }
     
      [HttpPut("{id:int}")]
-    public async Task<IActionResult> Update(string id, CustomerDto customerResource, CancellationToken ct = default)
+    public async Task<IActionResult> Update(int id, CustomerDto customerResource, CancellationToken ct = default)
     {
         try
         {
@@ -91,7 +91,7 @@ public class CustomersController : Controller
     }
     
     [HttpDelete("{id:int}")]
-    public async Task<IActionResult> Delete(string id, CancellationToken ct = default)
+    public async Task<IActionResult> Delete(int id, CancellationToken ct = default)
     {
         try
         {
