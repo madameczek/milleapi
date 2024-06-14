@@ -18,13 +18,9 @@ public class CustomerService : ICustomerService
         return await _repository.Add(customer, ct);
     }
 
-    public Task<Customer> Get(int id, CancellationToken ct)
+    public async Task<Customer> Get(int id, CancellationToken ct)
     {
-        if (id % 2 == 0)
-            return Task.FromResult(
-                new Customer() { FirstName = "Jan", LastName = "Wąski" });
-        
-        throw new RowNotInTableException();
+        return await _repository.Get(id, ct);
     }
 
     public async Task Update(int id, Customer customer, CancellationToken ct)

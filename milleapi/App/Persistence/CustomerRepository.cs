@@ -23,9 +23,15 @@ public class CustomerRepository : ICustomerRepository
         return entry.Entity;
     }
 
-    public Task<Customer> Get(int id, CancellationToken ct)
+    public async Task<Customer> Get(int id, CancellationToken ct)
     {
-        throw new NotImplementedException();
+        var customer= await _dbContext.Customers
+            .FirstOrDefaultAsync(c => c.Id == id && c.IsDeleted == false, ct);
+        
+        if (customer is null)
+            throw new RowNotInTableException("Customer not found");
+        
+        return customer;
     }
 
     public async Task Update(Customer customer, CancellationToken ct)
