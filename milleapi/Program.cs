@@ -1,6 +1,9 @@
 using Microsoft.EntityFrameworkCore;
 using milleapi;
-using milleapi.App.DataSource;
+using milleapi.App.Interfaces;
+using milleapi.App.Persistence;
+using milleapi.App.Persistence.DbContexts;
+using milleapi.App.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,7 +16,8 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddDbContext<CustomerDbContext>(o => o.UseSqlite(
     builder.Configuration["ConnectionStrings:DishesDBConnectionString"]));
-builder.Services.AddScoped(typeof(ICustomerService), typeof(CustomerService));
+builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
+builder.Services.AddScoped<ICustomerService, CustomerService>();
 
 var app = builder.Build();
 

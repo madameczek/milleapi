@@ -2,7 +2,7 @@ using FluentAssertions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using milleapi.App.DataSource;
+using milleapi.App.Interfaces;
 using milleapi.Controllers;
 using milleapi.Models;
 using Moq;

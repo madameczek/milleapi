@@ -1,6 +1,6 @@
 ﻿using milleapi.Models;
 
-namespace milleapi.App.DataSource;
+namespace milleapi.App.Interfaces;
 
 public interface ICustomerService
 {

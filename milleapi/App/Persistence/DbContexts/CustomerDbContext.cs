@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using milleapi.Entities;
 
-namespace milleapi;
+namespace milleapi.App.Persistence.DbContexts;
 
 public class CustomerDbContext : DbContext
 {

@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using milleapi;
+using milleapi.App.Persistence.DbContexts;
 
 #nullable disable
 
@@ -49,7 +50,7 @@ namespace milleapi.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedOn = new DateTime(2024, 6, 14, 11, 2, 41, 440, DateTimeKind.Utc).AddTicks(8195),
+                            CreatedOn = new DateTime(2024, 6, 14, 11, 2, 41, 440, DateTimeKind.Utc),
                             FirstName = "Jan",
                             IsDeleted = false,
                             LastName = "Kowalski"
@@ -57,7 +58,7 @@ namespace milleapi.Migrations
                         new
                         {
                             Id = 2,
-                            CreatedOn = new DateTime(2024, 6, 14, 11, 2, 41, 440, DateTimeKind.Utc).AddTicks(8196),
+                            CreatedOn = new DateTime(2024, 6, 14, 11, 2, 41, 440, DateTimeKind.Utc),
                             FirstName = "Adam",
                             IsDeleted = false,
                             LastName = "Adamski"
@@ -65,7 +66,7 @@ namespace milleapi.Migrations
                         new
                         {
                             Id = 3,
-                            CreatedOn = new DateTime(2024, 6, 14, 11, 2, 41, 440, DateTimeKind.Utc).AddTicks(8197),
+                            CreatedOn = new DateTime(2024, 6, 14, 11, 2, 41, 440, DateTimeKind.Utc),
                             FirstName = "Marcin",
                             IsDeleted = false,
                             LastName = "Nowak"
