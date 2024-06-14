@@ -67,7 +67,9 @@ public class CustomersController : Controller
     {
         try
         {
-            await _customerService.Update(id, dto.ToCustomer(), ct);
+            var customer = dto.ToCustomer();
+            customer.Id = id;
+            await _customerService.Update(id, customer, ct);
             _logger.LogInformation(
                 "{EndpointName} endpoint invoked. Customer: {Id} has been updated", nameof(Update), id);
             return NoContent();

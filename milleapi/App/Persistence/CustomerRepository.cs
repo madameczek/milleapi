@@ -1,4 +1,6 @@
-﻿using milleapi.App.Interfaces;
+﻿using System.Data;
+using Microsoft.EntityFrameworkCore;
+using milleapi.App.Interfaces;
 using milleapi.App.Persistence.DbContexts;
 using milleapi.Entities;
 
@@ -21,18 +23,35 @@ public class CustomerRepository : ICustomerRepository
         return entry.Entity;
     }
 
-    public Task<Customer> Get(int id)
+    public Task<Customer> Get(int id, CancellationToken ct)
     {
         throw new NotImplementedException();
     }
 
-    public Task Update(Customer customer)
+    public async Task Update(Customer customer, CancellationToken ct)
     {
-        throw new NotImplementedException();
+        var entity = await _dbContext.Customers.FirstOrDefaultAsync(c => c.Id == customer.Id, ct);
+        
+        if (entity is null)
+            throw new RowNotInTableException("Customer not found");
+
+        entity.FirstName = customer.FirstName;
+        entity.LastName = customer.LastName;
+        entity.IsDeleted = customer.IsDeleted;
+        
+        _dbContext.Customers.Update(entity);
+        await _dbContext.SaveChangesAsync(ct);
     }
 
-    public Task Remove(int id)
+    // soft delete
+    public async Task Delete(int id, CancellationToken ct)
     {
-        throw new NotImplementedException();
+        var customer = await _dbContext.Customers.FirstOrDefaultAsync(c => c.Id == id, ct);
+     
+        if (customer is null)
+            throw new RowNotInTableException("Customer not found");
+
+        customer.IsDeleted = true;
+        await _dbContext.SaveChangesAsync(ct);
     }
 }

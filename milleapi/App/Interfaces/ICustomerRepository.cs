@@ -4,8 +4,8 @@ namespace milleapi.App.Interfaces;
 
 public interface ICustomerRepository
 {
-    public Task<Customer> Add(Customer customer, CancellationToken ct);
-    public Task<Customer> Get(int id);
-    public Task Update(Customer customer);
-    public Task Remove(int id);
+    public Task<Customer> Add(Customer customer, CancellationToken cancellationToken);
+    public Task<Customer> Get(int id, CancellationToken cancellationToken);
+    public Task Update(Customer customer,  CancellationToken cancellationToken);
+    public Task Delete(int id,  CancellationToken cancellationToken);
 }

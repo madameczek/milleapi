@@ -1,7 +1,6 @@
 ﻿using System.Data;
 using milleapi.App.Interfaces;
 using milleapi.Entities;
-using milleapi.Models;
 
 namespace milleapi.App.Services;
 
@@ -14,12 +13,12 @@ public class CustomerService : ICustomerService
         _repository = repository;
     }
     
-    public async Task<Customer> Create(Customer customer, CancellationToken cancellationToken)
+    public async Task<Customer> Create(Customer customer, CancellationToken ct)
     {
-        return await _repository.Add(customer, cancellationToken);
+        return await _repository.Add(customer, ct);
     }
 
-    public Task<Customer> Get(int id, CancellationToken cancellationToken)
+    public Task<Customer> Get(int id, CancellationToken ct)
     {
         if (id % 2 == 0)
             return Task.FromResult(
@@ -28,13 +27,13 @@ public class CustomerService : ICustomerService
         throw new RowNotInTableException();
     }
 
-    public Task Update(int id, Customer dto, CancellationToken cancellationToken)
+    public async Task Update(int id, Customer customer, CancellationToken ct)
     {
-        throw new RowNotInTableException();
+        await _repository.Update(customer, ct);
     }
 
-    public Task Remove(int id, CancellationToken cancellationToken)
+    public async Task Remove(int id, CancellationToken ct)
     {
-        throw new NotImplementedException();
+        await _repository.Delete(id, ct);
     }
 }
