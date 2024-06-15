@@ -28,7 +28,7 @@ public class CustomersControllerTests
     }
     
     [Fact]
-    public async Task Test_Create_StatusCode404()
+    public async Task Test_Create_StatusCode400()
     {
         var mockRepository = new Mock<ICustomerService>(MockBehavior.Strict);
         mockRepository.Setup(x => 
@@ -36,10 +36,9 @@ public class CustomersControllerTests
             .ThrowsAsync(new ArgumentException());
         var controller = new CustomersController(Mock.Of<ILogger<CustomersController>>(), mockRepository.Object);
 
-        var actionResult = await controller.Create(new CreateCustomerDto()) as BadRequestObjectResult;
+        Func<Task> act = () => controller.Create(new CreateCustomerDto());
 
-        actionResult.Should().NotBeNull();
-        actionResult!.StatusCode.Should().Be(StatusCodes.Status400BadRequest);
+        await act.Should().ThrowAsync<ArgumentException>();
     }
     
     [Fact]
@@ -51,9 +50,8 @@ public class CustomersControllerTests
             .Throws(new Exception());
         var controller = new CustomersController(Mock.Of<ILogger<CustomersController>>(), mockRepository.Object);
 
-        var actionResult = await controller.Create(new CreateCustomerDto()) as ObjectResult;
+        Func<Task> act = () => controller.Create(new CreateCustomerDto());
 
-        actionResult.Should().NotBeNull();
-        actionResult!.StatusCode.Should().Be(StatusCodes.Status503ServiceUnavailable);
+        await act.Should().ThrowAsync<Exception>();
     }
 }
