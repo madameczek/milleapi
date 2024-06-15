@@ -1,5 +1,4 @@
-﻿using System.Text.Json.Serialization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using milleapi.App.Interfaces;
 using milleapi.Models;
 using milleapi.Shared.Mappers;
@@ -20,6 +19,9 @@ public class CustomersController : Controller
         _customerService = customerService;
     }
 
+    /// <summary>
+    /// Creates Customer record
+    /// </summary>
     [HttpPost]
     public async Task<IActionResult> Create(CreateCustomerDto customerDto, CancellationToken ct = default)
     {
@@ -30,10 +32,18 @@ public class CustomersController : Controller
         return Created($"/customers/{customer.Id}", customer);
     }
     
+    /// <summary>
+    /// Get Customer by Id
+    /// </summary>
+    /// <param name="id"></param>
     [HttpGet("{id:int}")]
     public async Task<IActionResult> Get(int id, CancellationToken ct = default) =>
         Ok(await _customerService.Get(id, ct));
 
+    /// <summary>
+    /// Retrieves Customers. Accepts pagination parameters
+    /// </summary>
+    /// <remarks>Check 'pagination' response header for paging information. There are three Customer records in the database on application startrup</remarks>
     [HttpGet]
     public async Task<IActionResult> GetAll([FromQuery]PaginationRequestParameters paginationParams, 
         CancellationToken ct = default)
@@ -52,7 +62,12 @@ public class CustomersController : Controller
         return Ok(pagedList);
     }
     
-     [HttpPut("{id:int}")]
+    /// <summary>
+    /// Updates Customer.
+    /// </summary>
+    /// <remarks>If you want deleted customer back, update with "isDeleted": false</remarks>
+    /// <param name="id"></param>
+    [HttpPut("{id:int}")]
     public async Task<IActionResult> Update(int id, UpdateCustomerDto dto, CancellationToken ct = default)
     {
         var customer = dto.ToCustomer();
@@ -64,6 +79,10 @@ public class CustomersController : Controller
         return NoContent();
     }
     
+    /// <summary>
+    /// Soft delete. See PUT how to undelete.
+    /// </summary>
+    /// <param name="id"></param>
     [HttpDelete("{id:int}")]
     public async Task<IActionResult> Delete(int id, CancellationToken ct = default)
     {

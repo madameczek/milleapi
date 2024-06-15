@@ -16,6 +16,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "MVC WebAPI", Version = "v1" });
+    var filePath = Path.Combine(System.AppContext.BaseDirectory, "milleapi.xml");
+    c.IncludeXmlComments(filePath);
 });
 
 builder.Services.AddDbContext<CustomerDbContext>(o => o.UseSqlite(
