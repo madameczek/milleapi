@@ -1,5 +1,4 @@
-﻿using System.Data;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using milleapi.App.Interfaces;
 using milleapi.Models;
 using milleapi.Shared.Mappers;
@@ -20,101 +19,38 @@ public class CustomersController : Controller
     }
 
     [HttpPost]
-    public async Task<IActionResult> Create(CreateCustomerDto createCustomerResource, CancellationToken ct = default)
+    public async Task<IActionResult> Create(CreateCustomerDto customerDto, CancellationToken ct = default)
     {
-        try
-        {
-            var customer = await _customerService.Create(createCustomerResource.ToCustomer(), ct);
+        var customer = await _customerService.Create(customerDto.ToCustomer(), ct);
             
-            _logger.LogInformation(
-                "{EndpointName} endpoint invoked. Customer: {Id} has been created", nameof(Create), customer.Id);
-            return Created($"/customers/{customer.Id}", customer);
-        }
-        catch (ArgumentException e)
-        {
-            _logger.LogInformation(e, "{EndpointName} endpoint invoked. Invalid argument found", nameof(Create));
-            return BadRequest($"{e.Message}");
-        }
-        catch (TaskCanceledException) { return StatusCode(statusCode: StatusCodes.Status503ServiceUnavailable); }
-        catch (Exception e)
-        {
-            _logger.LogError(e, "Error occured when {EndpointName} endpoint was invoked", nameof(Create));
-            return StatusCode(statusCode: StatusCodes.Status503ServiceUnavailable, "Internal application error");
-        }
+        _logger.LogInformation(
+            "{EndpointName} endpoint invoked. Customer: {Id} has been created", nameof(Create), customer.Id);
+        return Created($"/customers/{customer.Id}", customer);
     }
     
     [HttpGet("{id:int}")]
-    public async Task<IActionResult> Get(int id, CancellationToken ct = default)
-    {
-        try
-        {
-            return Ok(await _customerService.Get(id, ct));
-        }
-        catch (RowNotInTableException)
-        {
-            _logger.LogInformation("{EndpointName} endpoint invoked. Customer: {Id} was not found", nameof(Get), id);
-            return NotFound($"Customer with id: {id} was not found");
-        }
-        catch (TaskCanceledException) { return StatusCode(statusCode: StatusCodes.Status503ServiceUnavailable); }
-        catch (Exception e)
-        {
-            _logger.LogError(e, "Error occured when {EndpointName} endpoint was invoked", nameof(Get));
-            return StatusCode(statusCode: StatusCodes.Status503ServiceUnavailable,"Internal application error");
-        }
-    }
+    public async Task<IActionResult> Get(int id, CancellationToken ct = default) =>
+        Ok(await _customerService.Get(id, ct));
     
      [HttpPut("{id:int}")]
     public async Task<IActionResult> Update(int id, UpdateCustomerDto dto, CancellationToken ct = default)
     {
-        try
-        {
-            var customer = dto.ToCustomer();
-            customer.Id = id;
-            await _customerService.Update(customer, ct);
+        var customer = dto.ToCustomer();
+        customer.Id = id;
+        await _customerService.Update(customer, ct);
             
-            _logger.LogInformation(
-                "{EndpointName} endpoint invoked. Customer: {Id} has been updated", nameof(Update), id);
-            return NoContent();
-        }
-        catch (RowNotInTableException)
-        {
-            _logger.LogInformation(
-                "{EndpointName} endpoint invoked. Customer: {Id} was not found", nameof(Update), id);
-            return NotFound($"Customer with id: {id} was not found");
-        }
-        catch (ArgumentException e) when (e is ArgumentNullException)
-        {
-            _logger.LogInformation(e,"{EndpointName} endpoint invoked. Invalid argument found",nameof(Update));
-            return BadRequest($"{e.Message}");
-        }
-        catch (TaskCanceledException) { return StatusCode(statusCode: StatusCodes.Status503ServiceUnavailable); }
-        catch (Exception e)
-        {
-            _logger.LogError(e, "Error occured when {EndpointName} endpoint was invoked", nameof(Update));
-            return StatusCode(statusCode: StatusCodes.Status503ServiceUnavailable,"Internal application error");
-        }
+        _logger.LogInformation(
+            "Endpoint: {EndpointName}. Message: Customer Id={Id} has been updated", nameof(Update), id);
+        return NoContent();
     }
     
     [HttpDelete("{id:int}")]
     public async Task<IActionResult> Delete(int id, CancellationToken ct = default)
     {
-        try
-        {
-            await _customerService.Remove(id, ct);
+        await _customerService.Remove(id, ct);
             
-            _logger.LogInformation("{EndpointName} endpoint invoked. Customer: {Id} has been deleted", nameof(Delete), id);
-            return NoContent();
-        }
-        catch (RowNotInTableException)
-        {
-            _logger.LogInformation("{EndpointName} endpoint invoked. Customer: {Id} was not found", nameof(Delete), id);
-            return NotFound($"Customer with id: {id} was not found");
-        }
-        catch (TaskCanceledException) { return StatusCode(statusCode: StatusCodes.Status503ServiceUnavailable); }
-        catch (Exception e)
-        {
-            _logger.LogError(e, "Error occured when {EndpointName} endpoint was invoked", nameof(Delete));
-            return StatusCode(statusCode: StatusCodes.Status503ServiceUnavailable,"Internal application error");
-        }
+        _logger.LogInformation(
+            "Endpoint: {EndpointName}. Message: Customer Id={Id} has been marked as deleted", nameof(Delete), id);
+        return NoContent();
     }
 }
