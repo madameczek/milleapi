@@ -1,14 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.Text.Json.Serialization;
 
 namespace milleapi.Models;
 
 public class UpdateCustomerDto
 {
-    [JsonIgnore]
-    public int Id { get; set; }
-    
-    [StringLength(200)] 
+   [StringLength(200)] 
     public string? FirstName { get; set; }
     
     [MinLength(2)]

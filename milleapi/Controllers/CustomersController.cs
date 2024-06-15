@@ -25,6 +25,7 @@ public class CustomersController : Controller
         try
         {
             var customer = await _customerService.Create(createCustomerResource.ToCustomer(), ct);
+            
             _logger.LogInformation(
                 "{EndpointName} endpoint invoked. Customer: {Id} has been created", nameof(Create), customer.Id);
             return Created($"/customers/{customer.Id}", customer);
@@ -69,7 +70,8 @@ public class CustomersController : Controller
         {
             var customer = dto.ToCustomer();
             customer.Id = id;
-            await _customerService.Update(id, customer, ct);
+            await _customerService.Update(customer, ct);
+            
             _logger.LogInformation(
                 "{EndpointName} endpoint invoked. Customer: {Id} has been updated", nameof(Update), id);
             return NoContent();
@@ -99,6 +101,7 @@ public class CustomersController : Controller
         try
         {
             await _customerService.Remove(id, ct);
+            
             _logger.LogInformation("{EndpointName} endpoint invoked. Customer: {Id} has been deleted", nameof(Delete), id);
             return NoContent();
         }

@@ -22,7 +22,7 @@ public class CustomerService : ICustomerService
         return await _repository.Get(id, ct);
     }
 
-    public async Task Update(int id, Customer customer, CancellationToken ct)
+    public async Task Update(Customer customer, CancellationToken ct)
     {
         await _repository.Update(customer, ct);
     }
