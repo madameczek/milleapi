@@ -34,6 +34,9 @@ public class CustomerRepository : ICustomerRepository
         return customer;
     }
 
+    public IQueryable<Customer> GetAll() =>
+        _dbContext.Customers.Where(c => c.IsDeleted == false);
+
     public async Task Update(Customer customer, CancellationToken ct)
     {
         var entity = await _dbContext.Customers.FirstOrDefaultAsync(c => c.Id == customer.Id, ct);

@@ -1,7 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Text.Json.Serialization;
+using Microsoft.AspNetCore.Mvc;
 using milleapi.App.Interfaces;
 using milleapi.Models;
 using milleapi.Shared.Mappers;
+using milleapi.Shared.Pagination;
 
 namespace milleapi.Controllers;
 
@@ -31,6 +33,24 @@ public class CustomersController : Controller
     [HttpGet("{id:int}")]
     public async Task<IActionResult> Get(int id, CancellationToken ct = default) =>
         Ok(await _customerService.Get(id, ct));
+
+    [HttpGet]
+    public async Task<IActionResult> GetAll([FromQuery]PaginationRequestParameters paginationParams, 
+        CancellationToken ct = default)
+    {
+        var pagedList = await _customerService.GetAll(paginationParams, ct);
+        HttpContext.Response.Headers.Append("pagination", System.Text.Json.JsonSerializer.Serialize(
+            new PaginationHeader
+            {
+                TotalCount = pagedList.TotalCount,
+                TotalPages = pagedList.TotalPages,
+                CurrentPage = pagedList.CurrentPage,
+                PageSize = pagedList.PageSize,
+                HasPrevious = pagedList.HasPrevious,
+                HasNext = pagedList.HasNext
+            }));
+        return Ok(pagedList);
+    }
     
      [HttpPut("{id:int}")]
     public async Task<IActionResult> Update(int id, UpdateCustomerDto dto, CancellationToken ct = default)
