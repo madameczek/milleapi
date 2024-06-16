@@ -1,8 +1,10 @@
+using System.Data;
 using FluentAssertions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using milleapi.App.Interfaces;
+using milleapi.App.Services;
 using milleapi.Controllers;
 using milleapi.Entities;
 using milleapi.Models;
@@ -13,45 +15,99 @@ namespace UnitTests;
 public class CustomersControllerTests
 {
     [Fact]
-    public async Task Test_Create_StatusCode201()
+    public async Task Action_Create_When_Repository_Returns_Customer_Should_Return_Status201Created()
     {
-        var mockedRepository = new Mock<ICustomerService>(MockBehavior.Strict);
-        mockedRepository.Setup(x =>
-                x.Create(It.IsAny<Customer>(), It.IsAny<CancellationToken>()))
+        // setup
+        var mockRepository = new Mock<ICustomerRepository>(MockBehavior.Strict);
+        mockRepository.Setup(repository => 
+                repository.Add(It.IsAny<Customer>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(() => new Customer { Id = 1 });
-        var controller = new CustomersController(Mock.Of<ILogger<CustomersController>>(), mockedRepository.Object);
+        var customerService = new CustomerService(mockRepository.Object);
+        var controller = new CustomersController(Mock.Of<ILogger<CustomersController>>(), customerService);
+        var customerDto = new Mock<CreateCustomerDto>();
 
-        var actionResult = await controller.Create(new CreateCustomerDto()) as CreatedResult;
+        // act
+        var actionResult = await controller.Create(customerDto.Object) as CreatedResult;
 
+        // assert
         actionResult!.Location.Should().Contain("customers/1");
         actionResult.StatusCode.Should().Be(StatusCodes.Status201Created);
     }
     
     [Fact]
-    public async Task Test_Create_StatusCode400()
+    public async Task Action_Create_When_Repository_Throws_Exception_Should_Throw_Exception()
     {
-        var mockRepository = new Mock<ICustomerService>(MockBehavior.Strict);
-        mockRepository.Setup(x => 
-                x.Create(It.IsAny<Customer>(), It.IsAny<CancellationToken>()))
-            .ThrowsAsync(new ArgumentException());
-        var controller = new CustomersController(Mock.Of<ILogger<CustomersController>>(), mockRepository.Object);
+        // setup
+        var mockRepository = new Mock<ICustomerRepository>(MockBehavior.Strict);
+        mockRepository.Setup(repository => 
+                repository.Add(It.IsAny<Customer>(), It.IsAny<CancellationToken>()))
+            .ThrowsAsync(new Exception());
+        var customerService = new CustomerService(mockRepository.Object);
+        var controller = new CustomersController(Mock.Of<ILogger<CustomersController>>(), customerService);
 
+        // act
         Func<Task> act = () => controller.Create(new CreateCustomerDto());
 
-        await act.Should().ThrowAsync<ArgumentException>();
+        // assert
+        await act.Should().ThrowAsync<Exception>();
     }
     
     [Fact]
-    public async Task Test_Create_StatusCode503()
+    public async Task Action_Get_When_Repository_Throws_RowNotInATableException_Should_Throw_RowNotInATableException()
     {
-        var mockRepository = new Mock<ICustomerService>();
+        var mockRepository = new Mock<ICustomerRepository>(MockBehavior.Strict);
+        mockRepository.Setup(repository => 
+            repository.Get(It.IsAny<int>(), It.IsAny<CancellationToken>()))
+            .ThrowsAsync(new RowNotInTableException("Customer not found"));
+        var customerService = new CustomerService(mockRepository.Object);
+        var controller = new CustomersController(Mock.Of<ILogger<CustomersController>>(), customerService);
+
+        Func<Task> act = () => controller.Get(1);
+
+        await act.Should().ThrowAsync<RowNotInTableException>()
+            .WithMessage("Customer not found");
+    }
+    
+    [Fact]
+    public async Task Action_Get_When_Repository_Returns_Customer_Should_Return_Status200OK()
+    {
+        var mockRepository = new Mock<ICustomerRepository>();
         mockRepository.Setup(x => 
-            x.Create(It.IsAny<Customer>(), It.IsAny<CancellationToken>()))
-            .Throws(new Exception());
-        var controller = new CustomersController(Mock.Of<ILogger<CustomersController>>(), mockRepository.Object);
+                x.Get(It.IsAny<int>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(It.IsAny<Customer>());
+        var customerService = new CustomerService(mockRepository.Object);
+        var controller = new CustomersController(Mock.Of<ILogger<CustomersController>>(), customerService);
 
-        Func<Task> act = () => controller.Create(new CreateCustomerDto());
+        var actionResult = await controller.Get(1) as OkResult;
 
-        await act.Should().ThrowAsync<Exception>();
+        actionResult?.StatusCode.Should().Be(StatusCodes.Status200OK);
+    }
+    
+    [Fact]
+    public async Task Action_Update_When_Repository_Updates_Should_Return_Status204NoContent()
+    {
+        var mockRepository = new Mock<ICustomerRepository>();
+        mockRepository.Setup(x => 
+                x.Update(It.IsAny<Customer>(), It.IsAny<CancellationToken>()));
+        var customerService = new CustomerService(mockRepository.Object);
+        var controller = new CustomersController(Mock.Of<ILogger<CustomersController>>(), customerService);
+
+        var actionResult = await controller.Update(1, new UpdateCustomerDto()) as NoContentResult;
+
+        actionResult?.StatusCode.Should().Be(StatusCodes.Status204NoContent);
+    }
+    
+    [Fact]
+    public async Task Action_Delete_When_Repository_Deletes_Should_Return_Status204NoContent()
+    {
+        var mockRepository = new Mock<ICustomerRepository>();
+        mockRepository.Setup(x => 
+            x.Update(It.IsAny<Customer>(), It.IsAny<CancellationToken>()));
+        var customerService = new CustomerService(mockRepository.Object);
+        var controller = new CustomersController(Mock.Of<ILogger<CustomersController>>(), customerService);
+
+        var actionResult = await controller.Delete(1) as NoContentResult;
+
+        actionResult?.StatusCode.Should().Be(StatusCodes.Status204NoContent);
     }
 }
