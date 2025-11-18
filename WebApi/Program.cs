@@ -1,7 +1,10 @@
 using Domain.Entities;
+using FluentValidation;
 using Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
+using WebApi.Behaviors;
+using WebApi.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,6 +24,12 @@ builder.Services.AddSwaggerGen(c =>
 builder.Services.AddDbContext<AppDbContext>(o => o.UseSqlite(
     builder.Configuration.GetConnectionString("DefaultConnection")
     ?? "Data Source=app.db"));
+
+builder.Services.AddMediatR(cfg =>
+{
+    cfg.RegisterServicesFromAssembly(typeof(Program).Assembly);
+    cfg.AddOpenBehavior(typeof(ValidationBehavior<,>));
+});
 
 var app = builder.Build();
 
