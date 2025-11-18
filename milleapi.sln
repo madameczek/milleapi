@@ -1,10 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.14.36705.20 d17.14
+VisualStudioVersion = 17.14.36705.20
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "milleapi", "milleapi\milleapi.csproj", "{011FEFC4-71DC-4F82-9DC0-6B242045F918}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure", "Infrastructure\Infrastructure.csproj", "{B67C5781-B73D-4194-8ED4-343965E8E993}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain", "Domain\Domain.csproj", "{8CA544C3-A508-4F2E-ACC4-D1F5B54A8492}"
@@ -26,18 +24,6 @@ Global
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{011FEFC4-71DC-4F82-9DC0-6B242045F918}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{011FEFC4-71DC-4F82-9DC0-6B242045F918}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{011FEFC4-71DC-4F82-9DC0-6B242045F918}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{011FEFC4-71DC-4F82-9DC0-6B242045F918}.Debug|x64.Build.0 = Debug|Any CPU
-		{011FEFC4-71DC-4F82-9DC0-6B242045F918}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{011FEFC4-71DC-4F82-9DC0-6B242045F918}.Debug|x86.Build.0 = Debug|Any CPU
-		{011FEFC4-71DC-4F82-9DC0-6B242045F918}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{011FEFC4-71DC-4F82-9DC0-6B242045F918}.Release|Any CPU.Build.0 = Release|Any CPU
-		{011FEFC4-71DC-4F82-9DC0-6B242045F918}.Release|x64.ActiveCfg = Release|Any CPU
-		{011FEFC4-71DC-4F82-9DC0-6B242045F918}.Release|x64.Build.0 = Release|Any CPU
-		{011FEFC4-71DC-4F82-9DC0-6B242045F918}.Release|x86.ActiveCfg = Release|Any CPU
-		{011FEFC4-71DC-4F82-9DC0-6B242045F918}.Release|x86.Build.0 = Release|Any CPU
 		{B67C5781-B73D-4194-8ED4-343965E8E993}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{B67C5781-B73D-4194-8ED4-343965E8E993}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B67C5781-B73D-4194-8ED4-343965E8E993}.Debug|x64.ActiveCfg = Debug|Any CPU
