@@ -329,3 +329,4 @@ riderModule.iml
 !.vscode/launch.json
 !.vscode/extensions.json
 /PR.ArticlesWriterApi.Migrations/test_1.db
+/.editorconfig
