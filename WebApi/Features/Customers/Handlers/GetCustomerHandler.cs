@@ -21,10 +21,9 @@ public class GetCustomerHandler : IRequestHandler<GetCustomerQuery, CustomerResp
         var customer = await _context.Customers
             .FirstOrDefaultAsync(c => c.Id == request.Id && c.IsDeleted == false, ct);
 
-        if (customer == null)
-            throw new RowNotInTableException($"Customer with id {request.Id} not found");
-
-        return new CustomerResponse(
+        return customer == null
+            ? throw new RowNotInTableException($"Customer with id {request.Id} not found")
+            : new CustomerResponse(
             customer.Id,
             customer.FirstName,
             customer.LastName,
