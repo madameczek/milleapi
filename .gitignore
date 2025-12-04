@@ -206,6 +206,7 @@ ClientBin/
 *.publishsettings
 orleans.codegen.cs
 appsettings.secrets.json
+*.doc*
 
 # Including strong name files can present a security risk
 # (https://github.com/github/gitignore/pull/2483#issue-259490424)
@@ -329,3 +330,7 @@ riderModule.iml
 !.vscode/launch.json
 !.vscode/extensions.json
 /PR.ArticlesWriterApi.Migrations/test_1.db
+/.editorconfig
+
+# db files
+WebApi/app.db*
